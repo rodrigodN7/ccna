@@ -1,0 +1,57 @@
+!Initial configuration
+!A basic topology
+!by Rodrigo Noriega
+!31-03-22
+!
+!basic configuration
+enable
+configure terminal
+hostname SW1
+enable secret C15c0
+service password-encryption
+lldp run
+no ip domain-lookup
+banner motd #
+Welcome to my Network #
+!
+!configuring VLAN
+!
+vlan 7
+name Engineering
+exit
+!
+vlan 8
+name R&D
+exit
+!
+!Interface configuration
+interface range fastethernet0/1-2
+speed auto
+duplex auto
+switchport mode access
+switchport access vlan7
+no shutdown
+exit
+!
+interface range fastethernet0/3-4
+speed auto
+duplex auto
+switchport mode access
+switchport access vlan8
+no shutdown
+exit
+!
+line console 0
+password C15c0
+login
+motd-banner
+exit
+!
+line vty 0 15
+password C15c0
+login
+motd-banner
+exit
+!
+end
+!
