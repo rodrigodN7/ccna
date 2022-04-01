@@ -25,7 +25,7 @@ name R&D
 exit
 !
 !Interface configuration
-interface range fastethernet0/1-2
+interface range gigabitEthernet0/0-1
 speed auto
 duplex auto
 switchport mode access
@@ -33,7 +33,7 @@ switchport access vlan7
 no shutdown
 exit
 !
-interface range fastethernet0/3-4
+interface range gigabitEthernet0/2-3
 speed auto
 duplex auto
 switchport mode access
