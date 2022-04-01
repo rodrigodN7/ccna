@@ -29,7 +29,7 @@ interface range gigabitEthernet0/0-1
 speed auto
 duplex auto
 switchport mode access
-switchport access vlan7
+switchport access vlan 7
 no shutdown
 exit
 !
@@ -37,7 +37,7 @@ interface range gigabitEthernet0/2-3
 speed auto
 duplex auto
 switchport mode access
-switchport access vlan8
+switchport access vlan 8
 no shutdown
 exit
 !
