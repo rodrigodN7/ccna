@@ -1,0 +1,36 @@
+!
+!A really basic configuration
+!By Rodrigo Noriega
+!06-02-23
+!
+enable
+configure terminal
+hostname R1
+enable secret c15c0
+service password-encryption
+lldp run
+no ip domain-lookup
+banner motd #
+Welcome to R1 #
+!
+line console 0
+password c15c0
+login
+motd-banner
+exit
+!
+line vty 0 15
+password c15c0
+login
+motd-banner
+exit
+!
+interface fastethernet 0/0
+no shutdown
+!
+interface fastethernet0/0.1
+encapsulation dot1q <vlan>
+duplex full
+no shutdown
+end
+!
