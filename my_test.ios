@@ -25,7 +25,6 @@ login
 motd-banner
 exit
 !
-<<<<<<< HEAD
 interface fastethernet 0/0
 no shutdown
 !
