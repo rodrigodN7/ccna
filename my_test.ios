@@ -33,7 +33,5 @@ interface fastethernet0/0.1
 encapsulation dot1q <vlan>
 duplex full
 no shutdown
-=======
->>>>>>> d79d23293e85a9274f428d89e850d071a59779fd
 end
 !
