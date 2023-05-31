@@ -9,25 +9,35 @@ R0 config
 enable
 configure terminal
 hostname R0
-no ip domain-lookup
+ip domain-lookup
 lldp enable
 enable secret c15c0
 service password-encryption
 banner motd #
 Welcome to R0! #
 !
+!user creation
+!
+username admin privilege 15 secret c15c0
+!
+!ssh config
+!
+ip domain-name mysite.com
+crypto key generate rsa general-keys modulus 4096
+ip ssh version 2
 !line console 0
 !
 line console 0
 password c15c0
-login
+login local
 motd-banner
 !
 !line vty
 !
 line vty 0 15
 password c15c0
-login
+login local
+transport input ssh
 motd-banner
 !
 !interface configuration
@@ -62,7 +72,7 @@ exit
 !
 !ip routing
 !
-ip route 0.0.0.0 172.27.1.2
+ip route 0.0.0.0 0.0.0.0 172.27.1.2
 !
 end
 wr
@@ -78,22 +88,31 @@ hostname R1
 enable secret c15c0
 service password-encryption
 lldp run
-no ip domain-lookup
+ip domain-lookup
 banner motd #
 Welcome to R1! #
+!
+!user creation
+username admin privilege 15 secret c15c0
+!
+!ssh config
+ip domain-name mysite.com
+crypto key generate rsa general-keys modulus 4096
+ip ssh version 2
 !
 !line con 0
 !
 line console 0
 password c15c0
-login
+login local
 motd-banner
 !
 !line vty
 !
 line vty 0 15
 password c15c0
-login
+login local
+transport input ssh
 motd-banner
 !
 !interface configuration
@@ -128,8 +147,145 @@ exit
 !
 !ip routing
 !
-ip route 8.8.8.0 172.27.1.1
-ip route 192.168.10.0 172.27.1.1
+ip route 8.8.8.0 255.255.255.240 172.27.1.1
+ip route 192.168.10.0 255.255.255.0 172.27.1.1
+!
+end
+wr
+!
+
+-------
+!
+!S0
+!
+enable
+configure terminal
+hostname S0
+enable secret c15c0
+service password-encryption
+lldp run
+no ip domain-lookup
+banner motd #
+Welcome to S0! #
+!
+!user creation
+username admin privilege 15 secret c15c0
+!
+!ssh config
+!
+ip domain-name mysite.com
+crypto key generate rsa general-keys modulus 4096
+ip ssh version 2
+!
+!line con 0
+!
+line console 0
+password c15c0
+login
+motd-banner
+!
+!line vty
+!
+line vty 0 15
+password c15c0
+login local
+transport input ssh
+motd-banner
+!
+exit
+!
+!vlan and o&m config
+!
+vlan 10
+name Engineering
+!
+!interface config
+!
+interface vlan 10
+description o&m
+ip address 192.168.10.27 255.255.255.0
+!
+interface fa0/7
+description v10_access
+switchport mode access
+switchport access vlan 10
+!
+interface g0/1
+description v10_trunk
+switchport mode trunk
+switchport trunk allowed vlan 10,11
+!
+exit
+!
+ip default-gateway 192.168.10.1
+!
+end
+wr
+!
+
+-------
+!
+!S1
+!
+enable
+configure terminal
+hostname S1
+enable secret c15c0
+service password-encryption
+no ip domain-lookup
+lldp run
+banner motd #
+Welcome to S1! #
+!
+!user creation
+username admin privilege 15 secret c15c0
+!
+!ssh config
+!
+ip domain-name mysite.com
+crypto key generate rsa general-keys modulus 4096
+ip ssh version 2
+!
+!line con 0
+!
+line console 0
+password c15c0
+login local
+motd-banner
+!
+!line vty
+!
+line vty 0 15
+password c15c0
+login local
+transport input ssh
+motd-banner
+!
+!vlan and o&m
+!
+vlan 11
+name R&D
+!
+int vlan 11
+description o&m
+ip address 192.168.11.27 255.255.255.0
+no shutdown
+!
+!interface config
+!
+int fa0/7
+description vlan11_access
+switchport mode access
+switchport access vlan 11
+!
+int g0/1
+description vlan_trunk
+switchport mode trunk
+switchport trunk allowed vlan 10,11
+!
+exit
+!
+ip default-gateway 192.168.11.1
 !
 end
 wr
