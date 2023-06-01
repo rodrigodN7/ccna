@@ -2,14 +2,14 @@
 # Basic static routing 1 #
 # By Rodrigo Noriega     #
 ##########################
-
 !
-R0 config
+!R0 config
 !
 enable
 configure terminal
 hostname R0
 ip domain-lookup
+ip name-server 8.8.8.8
 lldp enable
 enable secret c15c0
 service password-encryption
@@ -25,6 +25,16 @@ username admin privilege 15 secret c15c0
 ip domain-name mysite.com
 crypto key generate rsa general-keys modulus 4096
 ip ssh version 2
+!
+!dhcp config
+!
+ip dhcp excluded-address 192.168.10.1
+ip dhcp pool my_pool 
+domain-name mysite.com
+network 192.168.10.0 255.255.255.0
+default-router 192.168.10.1
+dns-server 8.8.8.8
+!
 !line console 0
 !
 line console 0
@@ -89,6 +99,7 @@ enable secret c15c0
 service password-encryption
 lldp run
 ip domain-lookup
+ip name-server 8.8.8.8
 banner motd #
 Welcome to R1! #
 !
@@ -99,6 +110,14 @@ username admin privilege 15 secret c15c0
 ip domain-name mysite.com
 crypto key generate rsa general-keys modulus 4096
 ip ssh version 2
+!
+!dhcp config
+!
+ip excluded-address 192.168.11.1
+domain-name mysite.com
+network 192.168.11.0 255.255.255.0
+default-router 192.168.11.1
+dns-server 8.8.8.8
 !
 !line con 0
 !
@@ -164,7 +183,8 @@ hostname S0
 enable secret c15c0
 service password-encryption
 lldp run
-no ip domain-lookup
+ip domain-lookup
+ip name-server 8.8.8.8
 banner motd #
 Welcome to S0! #
 !
@@ -232,7 +252,8 @@ configure terminal
 hostname S1
 enable secret c15c0
 service password-encryption
-no ip domain-lookup
+ip domain-lookup
+ip name-server
 lldp run
 banner motd #
 Welcome to S1! #
