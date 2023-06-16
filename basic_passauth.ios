@@ -1,0 +1,39 @@
+!
+!Basic passsword authentication
+!by Rodrigo Noriega
+!
+!R1
+!
+!
+enable
+configure terminal
+hostname R1
+!create an user with desired privileges and password
+!username <username> privilege <0-15> <secret/password>
+usernmae localuser privilege 15 secret mys3creT
+!enables privileged level password
+enable password
+!enables privileged level secret
+enable secret c15c0
+!encrypt system passwords
+service password-encryption
+!
+!enabling ssh
+ip domain-name mydomain.domain
+crypto key generate rsa general-keys modulus 4096
+ip ssh version 2
+ip ssh authentication-retires <0-5>
+ip ssh time-out <1-120>
+!
+line console 0
+password c15c0
+login
+!
+line vty 0 15
+login local
+transport input ssh
+!
+end
+!
+exit
+!
